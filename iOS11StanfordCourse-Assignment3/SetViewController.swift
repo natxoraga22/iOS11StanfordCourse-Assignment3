@@ -91,8 +91,7 @@ class SetViewController: UIViewController, AIPlayerDelegate {
             else { hideCardButton(cardButton) }
         }
         // enable/disable deal more cards button
-        let uiIsFull = !(game.selectedCardsMatch ?? false) && game.dealtCards.count == cardButtons.count
-        dealMoreCardsButton.isEnabled = game.deck.count >= 3 && !uiIsFull
+        dealMoreCardsButton.isEnabled = game.deck.count >= 3
 
         // scores
         scoreLabel.text = "🏆 \(game.score)"
