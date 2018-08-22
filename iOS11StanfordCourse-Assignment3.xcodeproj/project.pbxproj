@@ -17,6 +17,7 @@
 		3800B2C1212DFFD1002E6F86 /* AiPlayerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2BB212DFFD1002E6F86 /* AiPlayerDelegate.swift */; };
 		3800B2C2212DFFD1002E6F86 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2BC212DFFD1002E6F86 /* Random.swift */; };
 		3800B2C4212E002D002E6F86 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3800B2C3212E002D002E6F86 /* Main.storyboard */; };
+		3800B2C9212E0C54002E6F86 /* SetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2C8212E0C54002E6F86 /* SetCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		3800B2BB212DFFD1002E6F86 /* AiPlayerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AiPlayerDelegate.swift; sourceTree = "<group>"; };
 		3800B2BC212DFFD1002E6F86 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
 		3800B2C3212E002D002E6F86 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		3800B2C8212E0C54002E6F86 /* SetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,18 +67,43 @@
 			isa = PBXGroup;
 			children = (
 				3800B2A5212DFF1C002E6F86 /* AppDelegate.swift */,
-				3800B2B9212DFFD1002E6F86 /* SetGame.swift */,
-				3800B2B8212DFFD1002E6F86 /* SetCard.swift */,
-				3800B2B7212DFFD1002E6F86 /* AIPlayer.swift */,
-				3800B2BB212DFFD1002E6F86 /* AiPlayerDelegate.swift */,
-				3800B2BA212DFFD1002E6F86 /* SetViewController.swift */,
 				3800B2BC212DFFD1002E6F86 /* Random.swift */,
+				3800B2C5212E0BCA002E6F86 /* Model */,
+				3800B2C6212E0BDD002E6F86 /* Controller */,
+				3800B2C7212E0C0D002E6F86 /* View */,
 				3800B2C3212E002D002E6F86 /* Main.storyboard */,
 				3800B2AC212DFF1D002E6F86 /* Assets.xcassets */,
 				3800B2AE212DFF1D002E6F86 /* LaunchScreen.storyboard */,
 				3800B2B1212DFF1D002E6F86 /* Info.plist */,
 			);
 			path = "iOS11StanfordCourse-Assignment3";
+			sourceTree = "<group>";
+		};
+		3800B2C5212E0BCA002E6F86 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3800B2B9212DFFD1002E6F86 /* SetGame.swift */,
+				3800B2B8212DFFD1002E6F86 /* SetCard.swift */,
+				3800B2B7212DFFD1002E6F86 /* AIPlayer.swift */,
+				3800B2BB212DFFD1002E6F86 /* AiPlayerDelegate.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3800B2C6212E0BDD002E6F86 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3800B2BA212DFFD1002E6F86 /* SetViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3800B2C7212E0C0D002E6F86 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3800B2C8212E0C54002E6F86 /* SetCardView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,6 +182,7 @@
 				3800B2BD212DFFD1002E6F86 /* AIPlayer.swift in Sources */,
 				3800B2BF212DFFD1002E6F86 /* SetGame.swift in Sources */,
 				3800B2BE212DFFD1002E6F86 /* SetCard.swift in Sources */,
+				3800B2C9212E0C54002E6F86 /* SetCardView.swift in Sources */,
 				3800B2A6212DFF1C002E6F86 /* AppDelegate.swift in Sources */,
 				3800B2C1212DFFD1002E6F86 /* AiPlayerDelegate.swift in Sources */,
 			);
