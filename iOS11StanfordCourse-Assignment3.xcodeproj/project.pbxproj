@@ -8,20 +8,30 @@
 
 /* Begin PBXBuildFile section */
 		3800B2A6212DFF1C002E6F86 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2A5212DFF1C002E6F86 /* AppDelegate.swift */; };
-		3800B2A8212DFF1C002E6F86 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2A7212DFF1C002E6F86 /* ViewController.swift */; };
-		3800B2AB212DFF1C002E6F86 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3800B2A9212DFF1C002E6F86 /* Main.storyboard */; };
 		3800B2AD212DFF1D002E6F86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3800B2AC212DFF1D002E6F86 /* Assets.xcassets */; };
 		3800B2B0212DFF1D002E6F86 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3800B2AE212DFF1D002E6F86 /* LaunchScreen.storyboard */; };
+		3800B2BD212DFFD1002E6F86 /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2B7212DFFD1002E6F86 /* AIPlayer.swift */; };
+		3800B2BE212DFFD1002E6F86 /* SetCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2B8212DFFD1002E6F86 /* SetCard.swift */; };
+		3800B2BF212DFFD1002E6F86 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2B9212DFFD1002E6F86 /* SetGame.swift */; };
+		3800B2C0212DFFD1002E6F86 /* SetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2BA212DFFD1002E6F86 /* SetViewController.swift */; };
+		3800B2C1212DFFD1002E6F86 /* AiPlayerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2BB212DFFD1002E6F86 /* AiPlayerDelegate.swift */; };
+		3800B2C2212DFFD1002E6F86 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2BC212DFFD1002E6F86 /* Random.swift */; };
+		3800B2C4212E002D002E6F86 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3800B2C3212E002D002E6F86 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3800B2A2212DFF1C002E6F86 /* iOS11StanfordCourse-Assignment3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS11StanfordCourse-Assignment3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3800B2A5212DFF1C002E6F86 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3800B2A7212DFF1C002E6F86 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3800B2AA212DFF1C002E6F86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3800B2AC212DFF1D002E6F86 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3800B2AF212DFF1D002E6F86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3800B2B1212DFF1D002E6F86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3800B2B7212DFFD1002E6F86 /* AIPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AIPlayer.swift; sourceTree = "<group>"; };
+		3800B2B8212DFFD1002E6F86 /* SetCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetCard.swift; sourceTree = "<group>"; };
+		3800B2B9212DFFD1002E6F86 /* SetGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
+		3800B2BA212DFFD1002E6F86 /* SetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetViewController.swift; sourceTree = "<group>"; };
+		3800B2BB212DFFD1002E6F86 /* AiPlayerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AiPlayerDelegate.swift; sourceTree = "<group>"; };
+		3800B2BC212DFFD1002E6F86 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
+		3800B2C3212E002D002E6F86 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,8 +65,13 @@
 			isa = PBXGroup;
 			children = (
 				3800B2A5212DFF1C002E6F86 /* AppDelegate.swift */,
-				3800B2A7212DFF1C002E6F86 /* ViewController.swift */,
-				3800B2A9212DFF1C002E6F86 /* Main.storyboard */,
+				3800B2B9212DFFD1002E6F86 /* SetGame.swift */,
+				3800B2B8212DFFD1002E6F86 /* SetCard.swift */,
+				3800B2B7212DFFD1002E6F86 /* AIPlayer.swift */,
+				3800B2BB212DFFD1002E6F86 /* AiPlayerDelegate.swift */,
+				3800B2BA212DFFD1002E6F86 /* SetViewController.swift */,
+				3800B2BC212DFFD1002E6F86 /* Random.swift */,
+				3800B2C3212E002D002E6F86 /* Main.storyboard */,
 				3800B2AC212DFF1D002E6F86 /* Assets.xcassets */,
 				3800B2AE212DFF1D002E6F86 /* LaunchScreen.storyboard */,
 				3800B2B1212DFF1D002E6F86 /* Info.plist */,
@@ -124,7 +139,7 @@
 			files = (
 				3800B2B0212DFF1D002E6F86 /* LaunchScreen.storyboard in Resources */,
 				3800B2AD212DFF1D002E6F86 /* Assets.xcassets in Resources */,
-				3800B2AB212DFF1C002E6F86 /* Main.storyboard in Resources */,
+				3800B2C4212E002D002E6F86 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,22 +150,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3800B2A8212DFF1C002E6F86 /* ViewController.swift in Sources */,
+				3800B2C2212DFFD1002E6F86 /* Random.swift in Sources */,
+				3800B2C0212DFFD1002E6F86 /* SetViewController.swift in Sources */,
+				3800B2BD212DFFD1002E6F86 /* AIPlayer.swift in Sources */,
+				3800B2BF212DFFD1002E6F86 /* SetGame.swift in Sources */,
+				3800B2BE212DFFD1002E6F86 /* SetCard.swift in Sources */,
 				3800B2A6212DFF1C002E6F86 /* AppDelegate.swift in Sources */,
+				3800B2C1212DFFD1002E6F86 /* AiPlayerDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		3800B2A9212DFF1C002E6F86 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3800B2AA212DFF1C002E6F86 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3800B2AE212DFF1D002E6F86 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
