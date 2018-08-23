@@ -67,13 +67,23 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="se1-el-VR7" customClass="SetCardView" customModule="iOS11StanfordCourse_Assignment3" customModuleProvider="target">
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="se1-el-VR7" customClass="SetCardView" customModule="iOS11StanfordCourse_Assignment3" customModuleProvider="target">
                                 <rect key="frame" x="16" y="136.66666666666669" width="343" height="548.66666666666652"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" priority="750" constant="1000" id="61I-Pt-r6A"/>
                                     <constraint firstAttribute="width" secondItem="se1-el-VR7" secondAttribute="height" multiplier="5:8" id="eIk-7L-jdg"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="number">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="symbolName" value="squiggle"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                        <color key="value" red="1" green="0.27041130419999998" blue="0.35583450770000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="shadingName" value="open"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.27843137254901962" green="0.44313725490196076" blue="0.28235294117647058" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
