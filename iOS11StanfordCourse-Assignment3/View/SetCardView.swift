@@ -100,37 +100,66 @@ class SetCardView: UIView {
     
     private func pathForSquiggleInBounds(_ bounds: CGRect) -> UIBezierPath {
         // DEBUG: draw bounds
-        let boundsPath = UIBezierPath(rect: bounds)
-        UIColor.blue.setStroke()
-        boundsPath.stroke()
+//        let boundsPath = UIBezierPath(rect: bounds)
+//        UIColor.blue.setStroke()
+//        boundsPath.stroke()
         
         let path = UIBezierPath()
         
-        let origin = CGPoint(x: bounds.minX, y: bounds.midY)
+        let limitSeparationX = bounds.width / 32.0
+        let limitSeparationY = bounds.height / 32.0
+        
+        // ORIGIN
+        let origin = CGPoint(x: bounds.minX + bounds.width / 16.0, y: bounds.minY + bounds.height / 4.0)
         path.move(to: origin)
-        path.addCurve(to: CGPoint(x: bounds.maxX - bounds.width / 8.0, y: bounds.minY),
-                      controlPoint1: CGPoint(x: bounds.minX + bounds.width / 4.0, y: bounds.minY - bounds.height / 2.0),
-                      controlPoint2: CGPoint(x: bounds.minX + bounds.width / 2.0, y: bounds.minY + bounds.height / 2.0))
-        //path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.midY))
         
-        path.addQuadCurve(to: CGPoint(x: bounds.maxX, y: bounds.midY),
-                          controlPoint: CGPoint(x: bounds.maxX, y: bounds.minY))
+        // FIRST CURVE
+        let curve1ControlPoint1 = CGPoint(x: bounds.minX + bounds.width / 4.0, y: bounds.minY + bounds.height / 8.0 - bounds.height / 2.5)
+        let curve1ControlPoint2 = CGPoint(x: bounds.minX + bounds.width * 0.5, y: bounds.minY + bounds.height * 0.5)
+        drawPoint(curve1ControlPoint1, withColor: UIColor.blue)
+        drawPoint(curve1ControlPoint2, withColor: UIColor.blue)
+        path.addCurve(to: CGPoint(x: bounds.maxX - bounds.width / 6.5, y: bounds.minY + limitSeparationY * 2.0),
+                      controlPoint1: curve1ControlPoint1,
+                      controlPoint2: curve1ControlPoint2)
         
-        path.addCurve(to: CGPoint(x: bounds.minX + bounds.width / 8.0, y: bounds.maxY),
-                      controlPoint1: CGPoint(x: bounds.maxX - bounds.width / 4.0, y: bounds.maxY + bounds.height / 2.0),
-                      controlPoint2: CGPoint(x: bounds.maxX - bounds.width / 2.0, y: bounds.maxY - bounds.height / 2.0))
         
-        path.addQuadCurve(to: origin, controlPoint: CGPoint(x: bounds.minX, y: bounds.maxY))
-//        path.move(to: CGPoint(x: bounds.minX, y: bounds.minY))
-//        path.addCurve(to: CGPoint(x: bounds.maxX, y: bounds.minY),
-//                      controlPoint1: CGPoint(x: bounds.minX + bounds.width / 2.0, y: bounds.minY - bounds.height / 2.0),
-//                      controlPoint2: CGPoint(x: bounds.minX + bounds.width / 2.0, y: bounds.minY + bounds.height / 2.0))
-//        path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY))
-//        path.addCurve(to: CGPoint(x: bounds.minX, y: bounds.maxY),
-//                      controlPoint1: CGPoint(x: bounds.maxX - bounds.width / 2.0, y: bounds.maxY + bounds.height / 2.0),
-//                      controlPoint2: CGPoint(x: bounds.maxX - bounds.width / 2.0, y: bounds.maxY - bounds.height / 2.0))
-        path.close()
+        path.addQuadCurve(to: CGPoint(x: bounds.maxX - limitSeparationX * 1.5, y: bounds.minY + limitSeparationY * 3.0),
+                          controlPoint: CGPoint(x: bounds.maxX - bounds.width / 12, y: bounds.minY))
+
+        
+        // SECOND CURVE
+        let curve2ControlPoint = CGPoint(x: bounds.maxX + limitSeparationX, y: bounds.minY + bounds.height * 0.3)
+        drawPoint(curve2ControlPoint, withColor: UIColor.green)
+        path.addQuadCurve(to: CGPoint(x: bounds.maxX - bounds.width / 16.0, y: bounds.maxY - bounds.size.height * 0.375),
+                          controlPoint: curve2ControlPoint)
+        
+        
+        // THIRD CURVE
+        let curve3ControlPoint1 = CGPoint(x: bounds.maxX - bounds.width * 0.3, y: bounds.maxY - bounds.height / 8.0 + bounds.height / 2.5)
+        let curve3ControlPoint2 = CGPoint(x: bounds.maxX - bounds.width * 0.5, y: bounds.maxY - bounds.height * 0.45)
+        drawPoint(curve3ControlPoint1, withColor: UIColor.purple)
+        drawPoint(curve3ControlPoint2, withColor: UIColor.purple)
+        path.addCurve(to: CGPoint(x: bounds.minX + bounds.width / 6.0, y: bounds.maxY - limitSeparationY * 2.0),
+                      controlPoint1: curve3ControlPoint1,
+                      controlPoint2: curve3ControlPoint2)
+        
+        path.addQuadCurve(to: CGPoint(x: bounds.minX + bounds.width / 16.0, y: bounds.maxY - limitSeparationY * 3.0),
+                          controlPoint: CGPoint(x: bounds.minX + bounds.width / 10, y: bounds.maxY))
+        
+        // FOURTH CURVE
+        let curve4ControlPoint = CGPoint(x: bounds.minX - limitSeparationX, y: bounds.maxY - bounds.height * 0.375)
+        drawPoint(curve4ControlPoint, withColor: UIColor.brown)
+        path.addQuadCurve(to: origin, controlPoint: curve4ControlPoint)
+        
+        
         return path
+    }
+    
+    // DEBUG
+    private func drawPoint(_ point: CGPoint, withColor color: UIColor) {
+//        let path = UIBezierPath(arcCenter: point, radius: 5, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
+//        color.setFill()
+//        path.fill()
     }
     
     
