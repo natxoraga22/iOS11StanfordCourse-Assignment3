@@ -41,7 +41,7 @@ struct SetCard: Equatable {
         }
     }
     
-    enum Symbol {
+    enum Symbol: Int {
         case symbol1, symbol2, symbol3
         static var allCases: [Symbol] = [.symbol1, .symbol2, .symbol3]
         
@@ -50,7 +50,7 @@ struct SetCard: Equatable {
         }
     }
     
-    enum Shading {
+    enum Shading: Int {
         case shading1, shading2, shading3
         static var allCases: [Shading] = [.shading1, .shading2, .shading3]
         

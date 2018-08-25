@@ -21,12 +21,12 @@ class SetCardView: UIView {
     
     // Interface builder compatibility
     @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'symbol' instead.")
-    @IBInspectable var symbolName: String? = "diamond" {
-        willSet { if let newSymbol = Symbol(rawValue: newValue?.lowercased() ?? "") { symbol = newSymbol } }
+    @IBInspectable var symbolInt: Int = 0 {
+        willSet { if let newSymbol = Symbol(rawValue: newValue) { symbol = newSymbol } }
     }
     @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'shading' instead.")
-    @IBInspectable var shadingName: String? = "solid" {
-        willSet { if let newShading = Shading(rawValue: newValue?.lowercased() ?? "") { shading = newShading } }
+    @IBInspectable var shadingInt: Int = 0 {
+        willSet { if let newShading = Shading(rawValue: newValue) { shading = newShading } }
     }
     @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'state' instead.")
     @IBInspectable var stateName: String? = "none" {
@@ -147,13 +147,13 @@ class SetCardView: UIView {
     }
     
     
-    // MARK: Enums
+    // MARK: - Enumerations
     
-    enum Symbol: String {
+    enum Symbol: Int {
         case diamond, squiggle, oval
     }
     
-    enum Shading: String {
+    enum Shading: Int {
         case solid, striped, open
     }
     

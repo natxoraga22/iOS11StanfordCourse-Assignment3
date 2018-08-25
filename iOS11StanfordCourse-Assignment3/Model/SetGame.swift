@@ -108,7 +108,7 @@ class SetGame {
     }
     
     func aiPlayerAlmostDone() {
-        aiPlayerDelegate?.willFindMatch()
+        aiPlayerDelegate?.aiPlayerWillFindMatch()
     }
     
     func aiPlayerSearchFinished() {
@@ -127,7 +127,7 @@ class SetGame {
         else {
             aiPlayer.stopSearching()
         }
-        aiPlayerDelegate?.didFindMatch()
+        aiPlayerDelegate?.aiPlayerDidFindMatch()
     }
     
     func getMatchInDealtCards() -> [SetCard]? {

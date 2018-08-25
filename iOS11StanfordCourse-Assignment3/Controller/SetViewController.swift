@@ -11,13 +11,16 @@ import UIKit
 
 class SetViewController: UIViewController, AIPlayerDelegate {
     
-    // Model
+    // MARK: - Model
+    
     private var game: SetGame! {
         didSet {
             game.aiPlayerDelegate = self
             updateViewFromModel()
         }
     }
+    
+    // MARK: - IBOutlets
     
     @IBOutlet private weak var dealMoreCardsButton: UIButton!
     @IBOutlet private weak var scoreLabel: UILabel!
@@ -26,35 +29,54 @@ class SetViewController: UIViewController, AIPlayerDelegate {
     @IBOutlet private weak var cardsGrid: SetCardsGrid! {
         didSet {
             cardsGrid.cardsTapGestureRecognizerTarget = self
-            cardsGrid.cardsTapGestureRecognizerAction = #selector(touchCard(_:))
+            cardsGrid.cardsTapGestureRecognizerAction = #selector(tapCard(_:))
             
-            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(touchDealThreeMoreCards))
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeDownToDealThreeMoreCards(_:)))
             swipe.direction = .down
             cardsGrid.addGestureRecognizer(swipe)
+            
+            let rotate = UIRotationGestureRecognizer(target: self, action: #selector(rotateToShuffleDealtCards(_:)))
+            cardsGrid.addGestureRecognizer(rotate)
         }
     }
     
+    // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         game = SetGame()
     }
     
+    // MARK: - IBActions
+    
     @IBAction private func touchNewGame() {
         game = SetGame()
     }
     
     @IBAction private func touchDealThreeMoreCards() {
-        if game.deck.count >= 3 {
-            game.dealThreeMoreCards()
+        game.dealThreeMoreCards()
+        updateViewFromModel()
+    }
+    
+    @objc private func swipeDownToDealThreeMoreCards(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            if game.deck.count >= 3 {
+                game.dealThreeMoreCards()
+                updateViewFromModel()
+            }
+        }
+    }
+    
+    @objc private func tapCard(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            let cardIndex = cardsGrid.cardViews.index(of: sender.view as! SetCardView)
+            game.chooseCard(at: cardIndex!)
             updateViewFromModel()
         }
     }
     
-    @objc private func touchCard(_ sender: UITapGestureRecognizer) {
-        let cardIndex = cardsGrid.cardViews.index(of: sender.view as! SetCardView)
-        game.chooseCard(at: cardIndex!)
-        updateViewFromModel()
+    @objc private func rotateToShuffleDealtCards(_ sender: UIRotationGestureRecognizer) {
+        // TODO: IMPLEMENT
     }
     
     @IBAction private func touchCheat() {
@@ -67,47 +89,18 @@ class SetViewController: UIViewController, AIPlayerDelegate {
         }
     }
     
-    func willFindMatch() {
-        updateViewFromModel()
-    }
-    
-    func didFindMatch() {
-        updateViewFromModel()
-    }
-    
-    private func getCardViewSymbolFromCardSymbol(_ cardSymbol: SetCard.Symbol) -> SetCardView.Symbol {
-        switch cardSymbol {
-            case .symbol1: return SetCardView.Symbol.diamond
-            case .symbol2: return SetCardView.Symbol.oval
-            case .symbol3: return SetCardView.Symbol.squiggle
-        }
-    }
-    
-    private func getCardViewShadingFromCardShading(_ cardShading: SetCard.Shading) -> SetCardView.Shading {
-        switch cardShading {
-            case .shading1: return SetCardView.Shading.open
-            case .shading2: return SetCardView.Shading.solid
-            case .shading3: return SetCardView.Shading.striped
-        }
-    }
-    
-    private func getCardViewColorFromCardColor(_ cardColor: SetCard.Color) -> UIColor {
-        switch cardColor {
-            case .color1: return UIColor.red
-            case .color2: return UIColor.green
-            case .color3: return UIColor.purple
-        }
-    }
+    // MARK: - Model-View synchronization
     
     private func updateViewFromModel() {
         // card views
         cardsGrid.cardViews.removeAll()
         for card in game.dealtCards {
+            
             // card content
             let cardView = SetCardView(frame: CGRect.zero)
             cardView.number = card.number.rawValue
-            cardView.symbol = getCardViewSymbolFromCardSymbol(card.symbol)
-            cardView.shading = getCardViewShadingFromCardShading(card.shading)
+            cardView.symbol = SetCardView.Symbol(rawValue: card.symbol.rawValue)!
+            cardView.shading = SetCardView.Shading(rawValue: card.shading.rawValue)!
             cardView.color = getCardViewColorFromCardColor(card.color)
             
             // card state
@@ -115,10 +108,8 @@ class SetViewController: UIViewController, AIPlayerDelegate {
                 if let cardMatched = game.selectedCardsMatch {
                     if cardMatched { cardView.state = .matched }
                     else { cardView.state = .mismatched}
-                }
-                else { cardView.state = .selected }
-            }
-            else { cardView.state = .none }
+                } else { cardView.state = .selected }
+            } else { cardView.state = .none }
             
             cardsGrid.cardViews.append(cardView)
         }
@@ -131,6 +122,14 @@ class SetViewController: UIViewController, AIPlayerDelegate {
         aiPlayerScoreLabel.text = getAIPlayerEmoji() + " \(game.aiPlayerScore)"
     }
     
+    private func getCardViewColorFromCardColor(_ cardColor: SetCard.Color) -> UIColor {
+        switch cardColor {
+            case .color1: return UIColor.red
+            case .color2: return UIColor.green
+            case .color3: return UIColor.purple
+        }
+    }
+    
     private func getAIPlayerEmoji() -> String {
         switch game.aiPlayer.status {
             case .idle: return "😴"
@@ -139,6 +138,16 @@ class SetViewController: UIViewController, AIPlayerDelegate {
             case .matchFound: return "😂"
             case .matchLost: return "😢"
         }
+    }
+    
+    // MARK: - AIPlayerDelegate
+    
+    func aiPlayerWillFindMatch() {
+        updateViewFromModel()
+    }
+    
+    func aiPlayerDidFindMatch() {
+        updateViewFromModel()
     }
 
 }
