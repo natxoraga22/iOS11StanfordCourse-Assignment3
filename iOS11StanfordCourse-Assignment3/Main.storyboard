@@ -82,7 +82,7 @@
                                     <userDefinedRuntimeAttribute type="color" keyPath="color">
                                         <color key="value" red="1" green="0.27041130419999998" blue="0.35583450770000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="shadingName" value="fill"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="shadingName" value="striped"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>

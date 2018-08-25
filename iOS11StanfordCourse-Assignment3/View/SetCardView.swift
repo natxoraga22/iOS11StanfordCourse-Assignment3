@@ -30,41 +30,30 @@ class SetCardView: UIView {
 
     override func draw(_ rect: CGRect) {
         // card
-        let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: 16.0)
+        let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: bounds.width * 0.08)
         UIColor.white.setFill()
         roundedRect.fill()
         
         // symbols
+        let symbolsPath = UIBezierPath()
         for index in 0..<number {
-            let symbolPath = pathForSymbolInBounds(boundsForSymbolInPosition(index))
-            switch shading {
-                case .solid:
-                    color.setFill()
-                    symbolPath.fill()
-                case .striped:
-                    fallthrough
-                case .open:
-                    color.setStroke()
-                    symbolPath.lineWidth = 5.0
-                    symbolPath.stroke()
-            }
+            symbolsPath.append(pathForSymbolInBounds(boundsForSymbolInPosition(index)))
         }
-        
-//        let firstOval = UIBezierPath(ovalIn: boundsForSymbolInPosition(0))
-//        color.setFill()
-//        firstOval.fill()
-        
-//        let secondItemBounds = CGRect(x: boundsWithMargin.origin.x, y: boundsWithMargin.origin.y + boundsWithMargin.height / 3.0,
-//                                      width: boundsWithMargin.width, height: boundsWithMargin.height / 3.0)
-//        let secondOval = UIBezierPath(ovalIn: secondItemBounds.insetBy(dx: 16.0, dy: 16.0))
-//        color.setFill()
-//        secondOval.fill()
-//        
-//        let thirdItemBounds = CGRect(x: boundsWithMargin.origin.x, y: boundsWithMargin.origin.y + (boundsWithMargin.height / 3.0) * 2.0,
-//                                     width: boundsWithMargin.width, height: boundsWithMargin.height / 3.0)
-//        let thirdOval = UIBezierPath(ovalIn: thirdItemBounds.insetBy(dx: 16.0, dy: 16.0))
-//        color.setFill()
-//        thirdOval.fill()
+        switch shading {
+            case .solid:
+                color.setFill()
+                symbolsPath.fill()
+            case .striped:
+                color.setStroke()
+                symbolsPath.lineWidth = 5.0
+                symbolsPath.stroke()
+                symbolsPath.addClip()
+                stripCard()
+            case .open:
+                color.setStroke()
+                symbolsPath.lineWidth = 5.0
+                symbolsPath.stroke()
+        }
     }
     
     private func boundsForSymbolInPosition(_ position: Int) -> CGRect {
@@ -77,10 +66,12 @@ class SetCardView: UIView {
         }
         yPositionMultiplier += CGFloat(position)
         
-        let boundsWithMargin = self.bounds.insetBy(dx: 32.0, dy: 32.0)
+        let marginX = bounds.width * 0.08
+        let marginY = bounds.height * 0.08
+        let boundsWithMargin = self.bounds.insetBy(dx: marginX, dy: marginY)
         let symbolHeight = boundsWithMargin.height / 3.0
         return CGRect(x: boundsWithMargin.origin.x, y: boundsWithMargin.origin.y + symbolHeight * yPositionMultiplier,
-                      width: boundsWithMargin.width, height: symbolHeight).insetBy(dx: 16.0, dy: 16.0)
+                      width: boundsWithMargin.width, height: symbolHeight).insetBy(dx: marginX * 0.5, dy: marginY * 0.4)
     }
     
     private func pathForSymbolInBounds(_ bounds: CGRect) -> UIBezierPath {
@@ -99,67 +90,40 @@ class SetCardView: UIView {
     }
     
     private func pathForSquiggleInBounds(_ bounds: CGRect) -> UIBezierPath {
-        // DEBUG: draw bounds
-//        let boundsPath = UIBezierPath(rect: bounds)
-//        UIColor.blue.setStroke()
-//        boundsPath.stroke()
-        
         let path = UIBezierPath()
-        
-        let limitSeparationX = bounds.width / 32.0
-        let limitSeparationY = bounds.height / 32.0
-        
-        // ORIGIN
-        let origin = CGPoint(x: bounds.minX + bounds.width / 16.0, y: bounds.minY + bounds.height / 4.0)
+        let origin = bounds.topLeft.offsetBy(dx: bounds.width * 0.065, dy: bounds.height * 0.25)
         path.move(to: origin)
         
-        // FIRST CURVE
-        let curve1ControlPoint1 = CGPoint(x: bounds.minX + bounds.width / 4.0, y: bounds.minY + bounds.height / 8.0 - bounds.height / 2.5)
-        let curve1ControlPoint2 = CGPoint(x: bounds.minX + bounds.width * 0.5, y: bounds.minY + bounds.height * 0.5)
-        drawPoint(curve1ControlPoint1, withColor: UIColor.blue)
-        drawPoint(curve1ControlPoint2, withColor: UIColor.blue)
-        path.addCurve(to: CGPoint(x: bounds.maxX - bounds.width / 6.5, y: bounds.minY + limitSeparationY * 2.0),
-                      controlPoint1: curve1ControlPoint1,
-                      controlPoint2: curve1ControlPoint2)
+        path.addCurve(to: bounds.topRight.offsetBy(dx: -bounds.width * 0.15, dy: bounds.height * 0.06),
+                      controlPoint1: bounds.topLeft.offsetBy(dx: bounds.width * 0.25, dy: -bounds.height * 0.275),
+                      controlPoint2: bounds.center)
         
+        path.addQuadCurve(to: bounds.topRight.offsetBy(dx: -bounds.width * 0.047, dy: bounds.height * 0.094),
+                          controlPoint: bounds.topRight.offsetBy(dx: -bounds.width * 0.083, dy: 0.0))
         
-        path.addQuadCurve(to: CGPoint(x: bounds.maxX - limitSeparationX * 1.5, y: bounds.minY + limitSeparationY * 3.0),
-                          controlPoint: CGPoint(x: bounds.maxX - bounds.width / 12, y: bounds.minY))
-
+        path.addQuadCurve(to: bounds.bottomRight.offsetBy(dx: -bounds.width * 0.065, dy: -bounds.size.height * 0.375),
+                          controlPoint: bounds.topRight.offsetBy(dx: bounds.width * 0.03, dy: bounds.height * 0.3))
         
-        // SECOND CURVE
-        let curve2ControlPoint = CGPoint(x: bounds.maxX + limitSeparationX, y: bounds.minY + bounds.height * 0.3)
-        drawPoint(curve2ControlPoint, withColor: UIColor.green)
-        path.addQuadCurve(to: CGPoint(x: bounds.maxX - bounds.width / 16.0, y: bounds.maxY - bounds.size.height * 0.375),
-                          controlPoint: curve2ControlPoint)
+        path.addCurve(to: bounds.bottomLeft.offsetBy(dx: bounds.width * 0.167, dy: -bounds.height * 0.06),
+                      controlPoint1: bounds.bottomRight.offsetBy(dx: -bounds.width * 0.3, dy: bounds.height * 0.275),
+                      controlPoint2: bounds.center.offsetBy(dx: 0.0, dy: bounds.height * 0.05))
         
+        path.addQuadCurve(to: bounds.bottomLeft.offsetBy(dx: bounds.width * 0.06, dy: -bounds.height * 0.094),
+                          controlPoint: bounds.bottomLeft.offsetBy(dx: bounds.width * 0.1, dy: 0.0))
         
-        // THIRD CURVE
-        let curve3ControlPoint1 = CGPoint(x: bounds.maxX - bounds.width * 0.3, y: bounds.maxY - bounds.height / 8.0 + bounds.height / 2.5)
-        let curve3ControlPoint2 = CGPoint(x: bounds.maxX - bounds.width * 0.5, y: bounds.maxY - bounds.height * 0.45)
-        drawPoint(curve3ControlPoint1, withColor: UIColor.purple)
-        drawPoint(curve3ControlPoint2, withColor: UIColor.purple)
-        path.addCurve(to: CGPoint(x: bounds.minX + bounds.width / 6.0, y: bounds.maxY - limitSeparationY * 2.0),
-                      controlPoint1: curve3ControlPoint1,
-                      controlPoint2: curve3ControlPoint2)
-        
-        path.addQuadCurve(to: CGPoint(x: bounds.minX + bounds.width / 16.0, y: bounds.maxY - limitSeparationY * 3.0),
-                          controlPoint: CGPoint(x: bounds.minX + bounds.width / 10, y: bounds.maxY))
-        
-        // FOURTH CURVE
-        let curve4ControlPoint = CGPoint(x: bounds.minX - limitSeparationX, y: bounds.maxY - bounds.height * 0.375)
-        drawPoint(curve4ControlPoint, withColor: UIColor.brown)
-        path.addQuadCurve(to: origin, controlPoint: curve4ControlPoint)
-        
-        
+        path.addQuadCurve(to: origin, controlPoint: bounds.bottomLeft.offsetBy(dx: -bounds.width * 0.05, dy: -bounds.height * 0.375))
         return path
     }
     
-    // DEBUG
-    private func drawPoint(_ point: CGPoint, withColor color: UIColor) {
-//        let path = UIBezierPath(arcCenter: point, radius: 5, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
-//        color.setFill()
-//        path.fill()
+    private func stripCard() {
+        for positionX in stride(from: bounds.minX, to: bounds.maxX, by: bounds.width / 50.0) {
+            let path = UIBezierPath()
+            path.move(to: CGPoint(x: positionX, y: bounds.minY))
+            path.addLine(to: CGPoint(x: positionX, y: bounds.maxY))
+            color.setStroke()
+            path.lineWidth = 2.0
+            path.stroke()
+        }
     }
     
     
