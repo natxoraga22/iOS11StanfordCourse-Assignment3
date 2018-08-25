@@ -19,6 +19,8 @@
 		3800B2C4212E002D002E6F86 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3800B2C3212E002D002E6F86 /* Main.storyboard */; };
 		3800B2C9212E0C54002E6F86 /* SetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2C8212E0C54002E6F86 /* SetCardView.swift */; };
 		3800B2CB2130CF24002E6F86 /* CoreGraphicsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3800B2CA2130CF24002E6F86 /* CoreGraphicsExtensions.swift */; };
+		385081FB2130DCCE007502DE /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385081FA2130DCCE007502DE /* Grid.swift */; };
+		385081FD2130DEAC007502DE /* SetCardsGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385081FC2130DEAC007502DE /* SetCardsGrid.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		3800B2C3212E002D002E6F86 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		3800B2C8212E0C54002E6F86 /* SetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardView.swift; sourceTree = "<group>"; };
 		3800B2CA2130CF24002E6F86 /* CoreGraphicsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreGraphicsExtensions.swift; sourceTree = "<group>"; };
+		385081FA2130DCCE007502DE /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		385081FC2130DEAC007502DE /* SetCardsGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardsGrid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +107,9 @@
 		3800B2C7212E0C0D002E6F86 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				385081FC2130DEAC007502DE /* SetCardsGrid.swift */,
 				3800B2C8212E0C54002E6F86 /* SetCardView.swift */,
+				385081FA2130DCCE007502DE /* Grid.swift */,
 				3800B2CA2130CF24002E6F86 /* CoreGraphicsExtensions.swift */,
 			);
 			path = View;
@@ -183,10 +189,12 @@
 				3800B2C2212DFFD1002E6F86 /* Random.swift in Sources */,
 				3800B2C0212DFFD1002E6F86 /* SetViewController.swift in Sources */,
 				3800B2BD212DFFD1002E6F86 /* AIPlayer.swift in Sources */,
+				385081FB2130DCCE007502DE /* Grid.swift in Sources */,
 				3800B2BF212DFFD1002E6F86 /* SetGame.swift in Sources */,
 				3800B2BE212DFFD1002E6F86 /* SetCard.swift in Sources */,
 				3800B2C9212E0C54002E6F86 /* SetCardView.swift in Sources */,
 				3800B2A6212DFF1C002E6F86 /* AppDelegate.swift in Sources */,
+				385081FD2130DEAC007502DE /* SetCardsGrid.swift in Sources */,
 				3800B2C1212DFFD1002E6F86 /* AiPlayerDelegate.swift in Sources */,
 				3800B2CB2130CF24002E6F86 /* CoreGraphicsExtensions.swift in Sources */,
 			);

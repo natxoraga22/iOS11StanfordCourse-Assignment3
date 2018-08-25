@@ -28,6 +28,8 @@ class SetCardView: UIView {
     }
     
 
+    private lazy var lineWidth = bounds.width * 0.01
+    
     override func draw(_ rect: CGRect) {
         // card
         let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: bounds.width * 0.08)
@@ -45,13 +47,13 @@ class SetCardView: UIView {
                 symbolsPath.fill()
             case .striped:
                 color.setStroke()
-                symbolsPath.lineWidth = 5.0
+                symbolsPath.lineWidth = lineWidth
                 symbolsPath.stroke()
                 symbolsPath.addClip()
                 stripCard()
             case .open:
                 color.setStroke()
-                symbolsPath.lineWidth = 5.0
+                symbolsPath.lineWidth = lineWidth
                 symbolsPath.stroke()
         }
     }
@@ -121,7 +123,7 @@ class SetCardView: UIView {
             path.move(to: CGPoint(x: positionX, y: bounds.minY))
             path.addLine(to: CGPoint(x: positionX, y: bounds.maxY))
             color.setStroke()
-            path.lineWidth = 2.0
+            path.lineWidth = lineWidth * 0.25
             path.stroke()
         }
     }
