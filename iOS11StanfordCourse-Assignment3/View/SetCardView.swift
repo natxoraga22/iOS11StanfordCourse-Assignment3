@@ -17,21 +17,28 @@ class SetCardView: UIView {
     var shading: Shading = .solid { didSet { setNeedsDisplay() } }
     @IBInspectable var color: UIColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1) { didSet { setNeedsDisplay() } }
     
+    var state: State = .none { didSet { setNeedsDisplay() } }
+    
     // Interface builder compatibility
     @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'symbol' instead.")
     @IBInspectable var symbolName: String? = "diamond" {
         willSet { if let newSymbol = Symbol(rawValue: newValue?.lowercased() ?? "") { symbol = newSymbol } }
     }
-    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'symbol' instead.")
+    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'shading' instead.")
     @IBInspectable var shadingName: String? = "solid" {
         willSet { if let newShading = Shading(rawValue: newValue?.lowercased() ?? "") { shading = newShading } }
+    }
+    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'state' instead.")
+    @IBInspectable var stateName: String? = "none" {
+        willSet { if let newState = State(rawValue: newValue?.lowercased() ?? "") { state = newState } }
     }
     
 
     private lazy var lineWidth = bounds.width * 0.01
+
     
     override func draw(_ rect: CGRect) {
-        // card
+        // card background
         let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: bounds.width * 0.08)
         UIColor.white.setFill()
         roundedRect.fill()
@@ -55,6 +62,17 @@ class SetCardView: UIView {
                 color.setStroke()
                 symbolsPath.lineWidth = lineWidth
                 symbolsPath.stroke()
+        }
+        
+        // card state
+        layer.cornerRadius = bounds.width * 0.08
+        layer.borderWidth = lineWidth * 5.0
+        switch state {
+            case .none: layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
+            case .selected: layer.borderColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
+            case .matched: layer.borderColor = #colorLiteral(red: 0, green: 0.9768045545, blue: 0, alpha: 1)
+            case .mismatched: layer.borderColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+            case .cheated: layer.borderColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
         }
     }
     
@@ -137,6 +155,10 @@ class SetCardView: UIView {
     
     enum Shading: String {
         case solid, striped, open
+    }
+    
+    enum State: String {
+        case none, selected, matched, mismatched, cheated
     }
 
 }

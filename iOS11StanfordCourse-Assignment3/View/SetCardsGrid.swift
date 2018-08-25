@@ -13,21 +13,28 @@ class SetCardsGrid: UIView {
 
     var cardViews = [SetCardView]() { didSet { setNeedsLayout() } }
     
+    var cardsTapGestureRecognizerTarget: UIViewController?
+    var cardsTapGestureRecognizerAction: Selector?
+    
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         // remove all cards from view
-        for cardView in subviews {
-            cardView.removeFromSuperview()
-        }
+        for cardView in subviews { cardView.removeFromSuperview() }
         
-        // position and add cards
+        // setup card grid
         var grid = Grid(layout: .aspectRatio(10 / 16), frame: bounds)
         grid.cellCount = cardViews.count
+        
+        // add cards to grid
         for (index, cardView) in cardViews.enumerated() {
             cardView.frame = grid[index]!.insetBy(dx: grid[index]!.width * 0.03, dy: grid[index]!.width * 0.03)
             cardView.isOpaque = false
+            cardView.contentMode = .redraw
+            if cardsTapGestureRecognizerTarget != nil && cardsTapGestureRecognizerAction != nil {
+                cardView.addGestureRecognizer(UITapGestureRecognizer(target: cardsTapGestureRecognizerTarget, action: cardsTapGestureRecognizerAction))
+            }
             addSubview(cardView)
         }
     }

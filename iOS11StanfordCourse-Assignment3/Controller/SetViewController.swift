@@ -20,10 +20,20 @@ class SetViewController: UIViewController, AIPlayerDelegate {
     }
     
     @IBOutlet private weak var dealMoreCardsButton: UIButton!
-    @IBOutlet private weak var cardsGrid: SetCardsGrid!
     @IBOutlet private weak var scoreLabel: UILabel!
     @IBOutlet private weak var aiPlayerScoreLabel: UILabel!
-    //private var cardButtons = [SetCardView]()
+    
+    @IBOutlet private weak var cardsGrid: SetCardsGrid! {
+        didSet {
+            cardsGrid.cardsTapGestureRecognizerTarget = self
+            cardsGrid.cardsTapGestureRecognizerAction = #selector(touchCard(_:))
+            
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(touchDealThreeMoreCards))
+            swipe.direction = .down
+            cardsGrid.addGestureRecognizer(swipe)
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,14 +45,17 @@ class SetViewController: UIViewController, AIPlayerDelegate {
     }
     
     @IBAction private func touchDealThreeMoreCards() {
-        game.dealThreeMoreCards()
-        updateViewFromModel()
+        if game.deck.count >= 3 {
+            game.dealThreeMoreCards()
+            updateViewFromModel()
+        }
     }
     
-//    @IBAction private func touchCard(_ sender: UIButton) {
-//        game.chooseCard(at: cardButtons.index(of: sender)!)
-//        updateViewFromModel()
-//    }
+    @objc private func touchCard(_ sender: UITapGestureRecognizer) {
+        let cardIndex = cardsGrid.cardViews.index(of: sender.view as! SetCardView)
+        game.chooseCard(at: cardIndex!)
+        updateViewFromModel()
+    }
     
     @IBAction private func touchCheat() {
         if let matchCards = game.getMatchInDealtCards() {
@@ -90,11 +103,23 @@ class SetViewController: UIViewController, AIPlayerDelegate {
         // card views
         cardsGrid.cardViews.removeAll()
         for card in game.dealtCards {
+            // card content
             let cardView = SetCardView(frame: CGRect.zero)
             cardView.number = card.number.rawValue
             cardView.symbol = getCardViewSymbolFromCardSymbol(card.symbol)
             cardView.shading = getCardViewShadingFromCardShading(card.shading)
             cardView.color = getCardViewColorFromCardColor(card.color)
+            
+            // card state
+            if game.selectedCards.contains(card) {
+                if let cardMatched = game.selectedCardsMatch {
+                    if cardMatched { cardView.state = .matched }
+                    else { cardView.state = .mismatched}
+                }
+                else { cardView.state = .selected }
+            }
+            else { cardView.state = .none }
+            
             cardsGrid.cardViews.append(cardView)
         }
         
@@ -104,44 +129,7 @@ class SetViewController: UIViewController, AIPlayerDelegate {
         // scores
         scoreLabel.text = "🏆 \(game.score)"
         aiPlayerScoreLabel.text = getAIPlayerEmoji() + " \(game.aiPlayerScore)"
-
-        
-//        // card buttons
-//        for (index, cardView) in setCardGrid.setCardViews.enumerated() {
-//            if index < game.dealtCards.count {
-//                let dealtCard = game.dealtCards[index]
-//                // matched card (for end game cases)
-//                if game.matchedCards.contains(dealtCard) { hideCardButton(cardView) }
-//                else {
-//                    updateCardButtonContent(cardView, fromCard:dealtCard)
-//
-//                    // selected card (can be matched, mismatched or simply selected)
-//                    if game.selectedCards.contains(dealtCard) {
-//                        cardView.layer.borderWidth = 3.0
-//                        if let cardMatched = game.selectedCardsMatch {
-//                            if cardMatched { cardView.layer.borderColor = #colorLiteral(red: 0, green: 0.9768045545, blue: 0, alpha: 1) }
-//                            else { cardView.layer.borderColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1) }
-//                        }
-//                        else { cardView.layer.borderColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1) }
-//                    }
-//                    // not selected card
-//                    else { cardView.layer.borderWidth = 0.0 }
-//                }
-//            }
-//            // card not dealt
-//            else { hideCardButton(cardView) }
-//        }
-        
-//
     }
-    
-//    private func hideCardView(_ cardView: UIButton) {
-//        cardButton.setTitle(nil, for: UIControlState.normal)
-//        cardButton.setAttributedTitle(nil, for: UIControlState.normal)
-//        cardButton.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
-//        cardButton.layer.borderWidth = 0.0
-//    }
-    
     
     private func getAIPlayerEmoji() -> String {
         switch game.aiPlayer.status {
