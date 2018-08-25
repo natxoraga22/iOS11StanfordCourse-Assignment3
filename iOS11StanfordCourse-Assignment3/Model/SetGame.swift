@@ -72,17 +72,17 @@ class SetGame {
     
     init() {
         deck = standardSetDeck
-        for _ in 1...SetGame.numberOfStartingCards { dealtCards.append(getRandomCard()!) }
+        for _ in 1...SetGame.numberOfStartingCards { dealtCards.append(drawRandomCardFromDeck()!) }
     }
     
     // MARK: - Public API
     
     func dealThreeMoreCards() {
         precondition(deck.count >= 3, "Not enough cards in deck")
-        if let match = selectedCardsMatch, match { replaceDealtSelectedCards() }
+        if let match = selectedCardsMatch, match { replaceMatchedCards() }
         else {
             if getMatchInDealtCards(usingSelected: false) != nil { score += SetGame.dealThreeCardsWithMatchOnTableScore }
-            for _ in 1...3 { dealtCards.append(getRandomCard()!) }
+            for _ in 1...3 { dealtCards.append(drawRandomCardFromDeck()!) }
         }
     }
     
@@ -92,9 +92,7 @@ class SetGame {
         
         // process previous match/mismatch
         if let previousMatch = selectedCardsMatch {
-            if previousMatch {
-                replaceDealtSelectedCards()
-            }
+            if previousMatch { replaceMatchedCards() }
             else { selectedCards.removeAll() }
         }
         
@@ -104,7 +102,7 @@ class SetGame {
                 selectedCards.remove(at: selectedCards.index(of: card)!)
                 score += SetGame.deselectScore
             }
-                // card not selected and not changed (processing previous match can change the dealt cards) --> select
+            // card not selected and not changed (processing previous match can change the dealt cards) --> select
             else if dealtCards[index] == card { selectedCards += [card] }
             
             // Check match/mismatch
@@ -146,25 +144,23 @@ class SetGame {
     }
     
     
+    // MARK: - Utility
     
-    
-    
-    
-    
-    private func getRandomCard() -> SetCard? {
+    private func drawRandomCardFromDeck() -> SetCard? {
         return !deck.isEmpty ? deck.remove(at: Int.random(max: deck.count)) : nil
     }
     
-
-    
-    private func replaceDealtSelectedCards() {
+    private func replaceMatchedCards() {
+        precondition(selectedCardsMatch != nil && selectedCardsMatch!, "There is no matched cards")
         for selectedCard in selectedCards {
-            if let randomCard = getRandomCard() { dealtCards[dealtCards.index(of: selectedCard)!] = randomCard }
+            // only replace if there is a card in the deck
+            if let randomCard = drawRandomCardFromDeck() { dealtCards[dealtCards.index(of: selectedCard)!] = randomCard }
         }
         selectedCards.removeAll()
     }
     
     
+    // MARK: - AIPlayer
     
     func aiPlayerAlmostDone() {
         aiPlayerDelegate?.aiPlayerWillFindMatch()
@@ -173,11 +169,9 @@ class SetGame {
     func aiPlayerSearchFinished() {
         if let matchCards = getMatchInDealtCards(usingSelected: false) {
             // AI player match
-            if let previousMatch = selectedCardsMatch, previousMatch {
-                replaceDealtSelectedCards()
-            }
+            if let previousMatch = selectedCardsMatch, previousMatch { replaceMatchedCards() }
             selectedCards = matchCards
-            replaceDealtSelectedCards()
+            replaceMatchedCards()
             
             aiPlayerScore += SetGame.matchScore
         }
@@ -186,7 +180,5 @@ class SetGame {
         }
         aiPlayerDelegate?.aiPlayerDidFindMatch()
     }
-    
-
-    
+        
 }
