@@ -40,6 +40,7 @@ class SetViewController: UIViewController, AIPlayerDelegate {
         }
     }
     
+    
     // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {
@@ -80,11 +81,12 @@ class SetViewController: UIViewController, AIPlayerDelegate {
     }
     
     @IBAction private func touchCheat() {
-        if let matchCards = game.getMatchInDealtCards() {
+        if let matchCards = game.getMatchInDealtCards(usingSelected: true) {
             for matchCard in matchCards {
                 let cardView = cardsGrid.cardViews[game.dealtCards.index(of: matchCard)!]
-                cardView.layer.borderWidth = 3.0
-                cardView.layer.borderColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
+                if cardView.state != .selected {
+                    cardView.state = .cheated
+                }
             }
         }
     }

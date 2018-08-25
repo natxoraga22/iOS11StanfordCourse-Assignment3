@@ -11,12 +11,18 @@ import Foundation
 
 struct SetCard: Equatable {
     
+    // MARK: - Properties
+    
     let number: Number
     let symbol: Symbol
     let shading: Shading
     let color: Color
     
+    
+    // MARK: - Matching
+    
     func matchesWith(_ cardToMatch1: SetCard, _ cardToMatch2: SetCard) -> Bool {
+        if self == cardToMatch1 || self == cardToMatch2 || cardToMatch1 == cardToMatch2 { return false }
         if self.number.matchesWith(cardToMatch1.number, cardToMatch2.number) {
             if self.symbol.matchesWith(cardToMatch1.symbol, cardToMatch2.symbol) {
                 if self.shading.matchesWith(cardToMatch1.shading, cardToMatch2.shading) {
@@ -30,7 +36,7 @@ struct SetCard: Equatable {
     }
     
     
-    // MARK: Enums
+    // MARK: - Enumerations
     
     enum Number: Int {
         case one = 1, two = 2, three = 3
