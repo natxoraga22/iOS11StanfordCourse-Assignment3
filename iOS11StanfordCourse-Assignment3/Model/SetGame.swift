@@ -75,6 +75,7 @@ class SetGame {
         for _ in 1...SetGame.numberOfStartingCards { dealtCards.append(drawRandomCardFromDeck()!) }
     }
     
+    
     // MARK: - Public API
     
     func dealThreeMoreCards() {
@@ -143,6 +144,10 @@ class SetGame {
         return nil
     }
     
+    func reshuffleDealtCards() {
+        // TODO: IMPLEMENT
+    }
+    
     
     // MARK: - Utility
     
@@ -155,6 +160,7 @@ class SetGame {
         for selectedCard in selectedCards {
             // only replace if there is a card in the deck
             if let randomCard = drawRandomCardFromDeck() { dealtCards[dealtCards.index(of: selectedCard)!] = randomCard }
+            else { dealtCards.remove(at: dealtCards.index(of: selectedCard)!) }
         }
         selectedCards.removeAll()
     }
@@ -180,5 +186,5 @@ class SetGame {
         }
         aiPlayerDelegate?.aiPlayerDidFindMatch()
     }
-        
+    
 }
