@@ -77,7 +77,10 @@ class SetViewController: UIViewController, AIPlayerDelegate {
     }
     
     @objc private func rotateToShuffleDealtCards(_ sender: UIRotationGestureRecognizer) {
-        // TODO: IMPLEMENT
+        if sender.state == .ended {
+            game.reshuffleDealtCards()
+            updateViewFromModel()
+        }
     }
     
     @IBAction private func touchCheat() {

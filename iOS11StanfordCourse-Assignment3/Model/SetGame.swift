@@ -145,7 +145,7 @@ class SetGame {
     }
     
     func reshuffleDealtCards() {
-        // TODO: IMPLEMENT
+        dealtCards.shuffle()
     }
     
     

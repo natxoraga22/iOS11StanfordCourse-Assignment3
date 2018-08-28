@@ -44,3 +44,16 @@ extension Double {
     }
     
 }
+
+
+// MARK: Array Extension
+
+extension Array {
+    
+    public mutating func shuffle() {
+        for index in self.indices.reversed() {
+            self.swapAt(index, Int.random(max: index))
+        }
+    }
+    
+}
