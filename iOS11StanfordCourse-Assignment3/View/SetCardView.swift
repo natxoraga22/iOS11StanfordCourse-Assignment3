@@ -12,6 +12,8 @@ import UIKit
 @IBDesignable
 class SetCardView: UIView {
 
+    // MARK: - Properties
+    
     @IBInspectable var number: Int = 1 { didSet { setNeedsDisplay() } }
     var symbol: Symbol = .diamond { didSet { setNeedsDisplay() } }
     var shading: Shading = .solid { didSet { setNeedsDisplay() } }
@@ -33,13 +35,21 @@ class SetCardView: UIView {
         willSet { if let newState = State(rawValue: newValue?.lowercased() ?? "") { state = newState } }
     }
     
+    // MARK: - Constants
 
-    private lazy var lineWidth = bounds.width * 0.01
+    private struct SizeRatio {
+        static let cornerRadiusToBoundsWidth: CGFloat = 0.08
+        static let symbolLineWidthToBoundsWidth: CGFloat = 0.01
+    }
+    private var cornerRadius: CGFloat { return bounds.width * SizeRatio.cornerRadiusToBoundsWidth }
+    private var symbolLineWidth: CGFloat { return bounds.width * SizeRatio.symbolLineWidthToBoundsWidth }
+    
 
+    // MARK: - Draw
     
     override func draw(_ rect: CGRect) {
-        // card background
-        let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: bounds.width * 0.08)
+        // card background and shape
+        let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
         UIColor.white.setFill()
         roundedRect.fill()
         
@@ -54,26 +64,20 @@ class SetCardView: UIView {
                 symbolsPath.fill()
             case .striped:
                 color.setStroke()
-                symbolsPath.lineWidth = lineWidth
+                symbolsPath.lineWidth = symbolLineWidth
                 symbolsPath.stroke()
                 symbolsPath.addClip()
                 stripCard()
             case .open:
                 color.setStroke()
-                symbolsPath.lineWidth = lineWidth
+                symbolsPath.lineWidth = symbolLineWidth
                 symbolsPath.stroke()
         }
         
         // card state
-        layer.cornerRadius = bounds.width * 0.08
-        layer.borderWidth = lineWidth * 5.0
-        switch state {
-            case .none: layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
-            case .selected: layer.borderColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
-            case .matched: layer.borderColor = #colorLiteral(red: 0, green: 0.9768045545, blue: 0, alpha: 1)
-            case .mismatched: layer.borderColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
-            case .cheated: layer.borderColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
-        }
+        layer.cornerRadius = cornerRadius
+        layer.borderWidth = symbolLineWidth * 5.0
+        layer.borderColor = state.color
     }
     
     private func boundsForSymbolInPosition(_ position: Int) -> CGRect {
@@ -141,7 +145,7 @@ class SetCardView: UIView {
             path.move(to: CGPoint(x: positionX, y: bounds.minY))
             path.addLine(to: CGPoint(x: positionX, y: bounds.maxY))
             color.setStroke()
-            path.lineWidth = lineWidth * 0.25
+            path.lineWidth = symbolLineWidth * 0.25
             path.stroke()
         }
     }
@@ -159,6 +163,16 @@ class SetCardView: UIView {
     
     enum State: String {
         case none, selected, matched, mismatched, cheated
+        
+        var color: CGColor {
+            switch self {
+                case .none: return #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
+                case .selected: return #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
+                case .matched: return #colorLiteral(red: 0, green: 0.9768045545, blue: 0, alpha: 1)
+                case .mismatched: return #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+                case .cheated: return #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
+            }
+        }
     }
 
 }

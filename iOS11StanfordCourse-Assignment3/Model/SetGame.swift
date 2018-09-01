@@ -28,34 +28,28 @@ class SetGame {
     private(set) var selectedCards = [SetCard]()
     
     var selectedCardsMatch: Bool? {
-        get {
-            if selectedCards.count < 3 { return nil }
-            else { return selectedCards[0].matchesWith(selectedCards[1], selectedCards[2]) }
-        }
+        if selectedCards.count < 3 { return nil }
+        else { return selectedCards[0].matchesWith(selectedCards[1], selectedCards[2]) }
     }
     
     private var standardSetDeck: [SetCard] {
-        get {
-            var setDeck = [SetCard]()
-            for number in SetCard.Number.allCases {
-                for symbol in SetCard.Symbol.allCases {
-                    for shading in SetCard.Shading.allCases {
-                        for color in SetCard.Color.allCases {
-                            setDeck.append(SetCard(number: number, symbol: symbol, shading: shading, color: color))
-                        }
+        var setDeck = [SetCard]()
+        for number in SetCard.Number.allCases {
+            for symbol in SetCard.Symbol.allCases {
+                for shading in SetCard.Shading.allCases {
+                    for color in SetCard.Color.allCases {
+                        setDeck.append(SetCard(number: number, symbol: symbol, shading: shading, color: color))
                     }
                 }
             }
-            return setDeck
         }
+        return setDeck
     }
     
     private var matchableCards: [SetCard] {
-        get {
-            return dealtCards.filter {
-                if let match = selectedCardsMatch, match { return !selectedCards.contains($0) }
-                return true
-            }
+        return dealtCards.filter {
+            if let match = selectedCardsMatch, match { return !selectedCards.contains($0) }
+            return true
         }
     }
     

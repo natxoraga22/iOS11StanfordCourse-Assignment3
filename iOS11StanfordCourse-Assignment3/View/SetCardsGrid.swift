@@ -11,11 +11,23 @@ import UIKit
 
 class SetCardsGrid: UIView {
 
-    var cardViews = [SetCardView]() { didSet { setNeedsLayout() } }
+    // MARK: - Constants
+    
+    private struct Constants {
+        static let aspectRatio: CGFloat = 10.0 / 16.0
+        static let cardViewFrameInsetToWidthRatio: CGFloat = 0.03
+    }
+    
+    
+    // MARK: - Gesture recognizers
     
     var cardsTapGestureRecognizerTarget: UIViewController?
     var cardsTapGestureRecognizerAction: Selector?
     
+    
+    // MARK: - Subviews
+    
+    var cardViews = [SetCardView]() { didSet { setNeedsLayout() } }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -24,12 +36,13 @@ class SetCardsGrid: UIView {
         for cardView in subviews { cardView.removeFromSuperview() }
         
         // setup card grid
-        var grid = Grid(layout: .aspectRatio(10 / 16), frame: bounds)
+        var grid = Grid(layout: .aspectRatio(Constants.aspectRatio), frame: bounds)
         grid.cellCount = cardViews.count
         
         // add cards to grid
         for (index, cardView) in cardViews.enumerated() {
-            cardView.frame = grid[index]!.insetBy(dx: grid[index]!.width * 0.03, dy: grid[index]!.width * 0.03)
+            cardView.frame = grid[index]!.insetBy(dx: grid[index]!.width * Constants.cardViewFrameInsetToWidthRatio,
+                                                  dy: grid[index]!.width * Constants.cardViewFrameInsetToWidthRatio)
             cardView.isOpaque = false
             cardView.contentMode = .redraw
             if cardsTapGestureRecognizerTarget != nil && cardsTapGestureRecognizerAction != nil {
