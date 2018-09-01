@@ -11,24 +11,43 @@ import Foundation
 
 class AIPlayer {
     
-    private static let minThinkingTime = 20.0
-    private static let maxThinkingTime = 30.0
+    // MARK: - Constants
     
-    private(set) var status = AIPlayerStatus.idle
+    private struct Constants {
+        static let minThinkingTime = 20.0
+        static let maxThinkingTime = 30.0
+        static let almostDoneOffsetTime = 5.0
+    }
     
-    private var almostDoneTimer: Timer?
-    private var searchFinishedTimer: Timer?
+    // MARK: - Status
     
+    enum Status {
+        case idle
+        case thinking
+        case almostDone
+        case matchFound
+        case matchLost
+    }
+    
+    private(set) var status = Status.idle
+    
+    // MARK: - Timers
+    
+    private weak var almostDoneTimer: Timer?
+    private weak var searchFinishedTimer: Timer?
+    
+    
+    // MARK: - Public API
     
     func searchMatch(onAlmostDone almostDoneCallback: @escaping () -> Void, onSearchFinished searchFinishedCallback: @escaping () -> Void) {
         status = .thinking
         if searchFinishedTimer == nil {
-            let timeInterval = Double.random(min: AIPlayer.minThinkingTime, max: AIPlayer.maxThinkingTime)
-            almostDoneTimer = Timer.scheduledTimer(withTimeInterval: timeInterval - 5.0, repeats: false) { (timer) in
+            let timeInterval = Double.random(min: Constants.minThinkingTime, max: Constants.maxThinkingTime)
+            almostDoneTimer = Timer.scheduledTimer(withTimeInterval: timeInterval - Constants.almostDoneOffsetTime, repeats: false) { timer in
                 self.status = .almostDone
                 almostDoneCallback()
             }
-            searchFinishedTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { (timer) in
+            searchFinishedTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { timer in
                 self.status = .matchFound
                 searchFinishedCallback()
             }
@@ -39,16 +58,6 @@ class AIPlayer {
         status = .matchLost
         almostDoneTimer?.invalidate()
         searchFinishedTimer?.invalidate()
-        almostDoneTimer = nil
-        searchFinishedTimer = nil
     }
     
-}
-
-enum AIPlayerStatus {
-    case idle
-    case thinking
-    case almostDone
-    case matchFound
-    case matchLost
 }

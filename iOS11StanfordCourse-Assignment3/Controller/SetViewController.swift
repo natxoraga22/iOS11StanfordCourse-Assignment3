@@ -84,7 +84,7 @@ class SetViewController: UIViewController, AIPlayerDelegate {
     }
     
     @IBAction private func touchCheat() {
-        if let matchCards = game.getMatchInDealtCards(usingSelected: true) {
+        if let matchCards = game.getMatchInDealtCards(usingSelectedCards: true) {
             for matchCard in matchCards {
                 let cardView = cardsGrid.cardViews[game.dealtCards.index(of: matchCard)!]
                 if cardView.state != .selected {

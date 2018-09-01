@@ -11,13 +11,15 @@ import Foundation
 
 class SetGame {
     
-    // MARK: - Static properties
+    // MARK: - Constants
     
-    private static let numberOfStartingCards = 12
-    private static let matchScore = +5
-    private static let mismatchScore = -3
-    private static let deselectScore = -1
-    private static let dealThreeCardsWithMatchOnTableScore = -2
+    private struct Constants {
+        static let numberOfStartingCards = 12
+        static let matchScore = +5
+        static let mismatchScore = -3
+        static let deselectScore = -1
+        static let dealThreeCardsWithMatchOnTableScore = -2
+    }
     
     // MARK: - Card properties
     
@@ -48,7 +50,7 @@ class SetGame {
         }
     }
     
-    private var dealtCardsNotMatched: [SetCard] {
+    private var matchableCards: [SetCard] {
         get {
             return dealtCards.filter {
                 if let match = selectedCardsMatch, match { return !selectedCards.contains($0) }
@@ -72,7 +74,7 @@ class SetGame {
     
     init() {
         deck = standardSetDeck
-        for _ in 1...SetGame.numberOfStartingCards { dealtCards.append(drawRandomCardFromDeck()!) }
+        for _ in 1...Constants.numberOfStartingCards { dealtCards.append(drawRandomCardFromDeck()!) }
     }
     
     
@@ -82,7 +84,7 @@ class SetGame {
         precondition(deck.count >= 3, "Not enough cards in deck")
         if let match = selectedCardsMatch, match { replaceMatchedCards() }
         else {
-            if getMatchInDealtCards(usingSelected: false) != nil { score += SetGame.dealThreeCardsWithMatchOnTableScore }
+            if getMatchInDealtCards(usingSelectedCards: false) != nil { score += Constants.dealThreeCardsWithMatchOnTableScore }
             for _ in 1...3 { dealtCards.append(drawRandomCardFromDeck()!) }
         }
     }
@@ -101,31 +103,31 @@ class SetGame {
             // card already selected --> deselect
             if selectedCards.contains(card) {
                 selectedCards.remove(at: selectedCards.index(of: card)!)
-                score += SetGame.deselectScore
+                score += Constants.deselectScore
             }
             // card not selected and not changed (processing previous match can change the dealt cards) --> select
             else if dealtCards[index] == card { selectedCards += [card] }
             
-            // Check match/mismatch
+            // check match/mismatch
             if let newMatch = selectedCardsMatch {
                 if newMatch {
-                    score += SetGame.matchScore
+                    score += Constants.matchScore
                     aiPlayer.stopSearching()
                 }
-                else { score += SetGame.mismatchScore }
+                else { score += Constants.mismatchScore }
             }
             aiPlayer.searchMatch(onAlmostDone: aiPlayerAlmostDone, onSearchFinished: aiPlayerSearchFinished)
         }
     }
     
-    func getMatchInDealtCards(usingSelected useSelected: Bool) -> [SetCard]? {
-        let cardsToMatch = dealtCardsNotMatched
-        if useSelected && selectedCards.count == 2 {
+    func getMatchInDealtCards(usingSelectedCards useSelectedCards: Bool) -> [SetCard]? {
+        let cardsToMatch = matchableCards
+        if useSelectedCards && selectedCards.count == 2 {
             for index3 in 0..<cardsToMatch.count {
                 if selectedCards[0].matchesWith(selectedCards[1], cardsToMatch[index3]) { return [selectedCards[0], selectedCards[1], cardsToMatch[index3]] }
             }
         }
-        else if useSelected && selectedCards.count == 1 {
+        else if useSelectedCards && selectedCards.count == 1 {
             for index2 in 0..<cardsToMatch.count {
                 for index3 in (index2 + 1)..<cardsToMatch.count {
                     if selectedCards[0].matchesWith(cardsToMatch[index2], cardsToMatch[index3]) { return [selectedCards[0], cardsToMatch[index2], cardsToMatch[index3]] }
@@ -173,13 +175,13 @@ class SetGame {
     }
     
     func aiPlayerSearchFinished() {
-        if let matchCards = getMatchInDealtCards(usingSelected: false) {
+        if let matchCards = getMatchInDealtCards(usingSelectedCards: false) {
             // AI player match
             if let previousMatch = selectedCardsMatch, previousMatch { replaceMatchedCards() }
             selectedCards = matchCards
             replaceMatchedCards()
             
-            aiPlayerScore += SetGame.matchScore
+            aiPlayerScore += Constants.matchScore
         }
         else {
             aiPlayer.stopSearching()
