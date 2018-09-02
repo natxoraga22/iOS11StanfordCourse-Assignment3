@@ -47,8 +47,8 @@ class SetGame {
     }
     
     private var matchableCards: [SetCard] {
-        return dealtCards.filter {
-            if let match = selectedCardsMatch, match { return !selectedCards.contains($0) }
+        return dealtCards.filter { dealtCard in
+            if let match = selectedCardsMatch, match { return !selectedCards.contains(dealtCard) }
             return true
         }
     }
