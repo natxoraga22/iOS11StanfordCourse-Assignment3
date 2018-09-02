@@ -16,19 +16,9 @@ extension CGPoint {
 }
 
 extension CGRect {
-    var topLeft: CGPoint {
-        get { return CGPoint(x: minX, y: minY) }
-    }
-    var topRight: CGPoint {
-        get { return CGPoint(x: maxX, y: minY) }
-    }
-    var bottomLeft: CGPoint {
-        get { return CGPoint(x: minX, y: maxY) }
-    }
-    var bottomRight: CGPoint {
-        get { return CGPoint(x: maxX, y: maxY) }
-    }
-    var center: CGPoint {
-        get { return CGPoint(x: midX, y: midY) }
-    }
+    var topLeft: CGPoint { return CGPoint(x: minX, y: minY) }
+    var topRight: CGPoint { return CGPoint(x: maxX, y: minY) }
+    var bottomLeft: CGPoint { return CGPoint(x: minX, y: maxY) }
+    var bottomRight: CGPoint { return CGPoint(x: maxX, y: maxY) }
+    var center: CGPoint { return CGPoint(x: midX, y: midY) }
 }
