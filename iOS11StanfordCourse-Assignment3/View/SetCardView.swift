@@ -37,12 +37,44 @@ class SetCardView: UIView {
     
     // MARK: - Constants
 
-    private struct SizeRatio {
+    private struct CardSizeRatio {
         static let cornerRadiusToBoundsWidth: CGFloat = 0.08
-        static let symbolLineWidthToBoundsWidth: CGFloat = 0.01
+        static let borderWidthToBoundsWidth: CGFloat = 0.05
+        static let marginWidthToBoundsWidth: CGFloat = 0.08
+        static let marginHeightToBoundsHeight: CGFloat = 0.08
     }
-    private var cornerRadius: CGFloat { return bounds.width * SizeRatio.cornerRadiusToBoundsWidth }
-    private var symbolLineWidth: CGFloat { return bounds.width * SizeRatio.symbolLineWidthToBoundsWidth }
+    private var cornerRadius: CGFloat { return bounds.width * CardSizeRatio.cornerRadiusToBoundsWidth }
+    private var borderWidth: CGFloat { return bounds.width * CardSizeRatio.borderWidthToBoundsWidth }
+    private var marginWidth: CGFloat { return bounds.width * CardSizeRatio.marginWidthToBoundsWidth }
+    private var marginHeight: CGFloat { return bounds.height * CardSizeRatio.marginHeightToBoundsHeight }
+    
+    private struct SymbolSizeRatio {
+        static let lineWidthToBoundsWidth: CGFloat = 0.01
+        static let marginWidthToBoundsWidth: CGFloat = 0.04
+        static let marginHeightToBoundsHeight: CGFloat = 0.03
+        static let stripDistanceToBoundsWidth: CGFloat = 0.02
+        static let stripLineWidthToBoundsWidth: CGFloat = SymbolSizeRatio.lineWidthToBoundsWidth * 0.25
+    }
+    private var symbolLineWidth: CGFloat { return bounds.width * SymbolSizeRatio.lineWidthToBoundsWidth }
+    private var symbolMarginWidth: CGFloat { return bounds.width * SymbolSizeRatio.marginWidthToBoundsWidth }
+    private var symbolMarginHeight: CGFloat { return bounds.height * SymbolSizeRatio.marginHeightToBoundsHeight }
+    private var stripDistance: CGFloat { return bounds.width * SymbolSizeRatio.stripDistanceToBoundsWidth }
+    private var stripLineWidth: CGFloat { return bounds.width * SymbolSizeRatio.stripLineWidthToBoundsWidth }
+    
+    private func squiggleOrigin(in bounds: CGRect) -> CGPoint { return bounds.topLeft.offsetBy(dx: bounds.width * 0.065, dy: bounds.height * 0.25) }
+    private func squiggleFirstCurveEndPoint(in bounds: CGRect) -> CGPoint { return bounds.topRight.offsetBy(dx: -bounds.width * 0.15, dy: bounds.height * 0.06) }
+    private func squiggleFirstCurveControlPoint1(in bounds: CGRect) -> CGPoint { return bounds.topLeft.offsetBy(dx: bounds.width * 0.25, dy: -bounds.height * 0.275) }
+    private func squiggleFirstCurveControlPoint2(in bounds: CGRect) -> CGPoint { return bounds.center }
+    private func squiggleSecondCurveEndPoint(in bounds: CGRect) -> CGPoint { return bounds.topRight.offsetBy(dx: -bounds.width * 0.047, dy: bounds.height * 0.094) }
+    private func squiggleSecondCurveControlPoint(in bounds: CGRect) -> CGPoint { return bounds.topRight.offsetBy(dx: -bounds.width * 0.083, dy: 0.0) }
+    private func squiggleThirdCurveEndPoint(in bounds: CGRect) -> CGPoint { return bounds.bottomRight.offsetBy(dx: -bounds.width * 0.065, dy: -bounds.size.height * 0.375) }
+    private func squiggleThirdCurveControlPoint(in bounds: CGRect) -> CGPoint { return bounds.topRight.offsetBy(dx: bounds.width * 0.03, dy: bounds.height * 0.3) }
+    private func squiggleFourthCurveEndPoint(in bounds: CGRect) -> CGPoint { return bounds.bottomLeft.offsetBy(dx: bounds.width * 0.167, dy: -bounds.height * 0.06) }
+    private func squiggleFourthCurveControlPoint1(in bounds: CGRect) -> CGPoint { return bounds.bottomRight.offsetBy(dx: -bounds.width * 0.3, dy: bounds.height * 0.275) }
+    private func squiggleFourthCurveControlPoint2(in bounds: CGRect) -> CGPoint { return bounds.center.offsetBy(dx: 0.0, dy: bounds.height * 0.05) }
+    private func squiggleFifthCurveEndPoint(in bounds: CGRect) -> CGPoint { return bounds.bottomLeft.offsetBy(dx: bounds.width * 0.06, dy: -bounds.height * 0.094) }
+    private func squiggleFifthCurveControlPoint(in bounds: CGRect) -> CGPoint { return bounds.bottomLeft.offsetBy(dx: bounds.width * 0.1, dy: 0.0) }
+    private func squiggleSixthCurveControlPoint(in bounds: CGRect) -> CGPoint { return bounds.bottomLeft.offsetBy(dx: -bounds.width * 0.05, dy: -bounds.height * 0.375) }
     
 
     // MARK: - Draw
@@ -56,7 +88,7 @@ class SetCardView: UIView {
         // symbols
         let symbolsPath = UIBezierPath()
         for index in 0..<number {
-            symbolsPath.append(pathForSymbolInBounds(boundsForSymbolInPosition(index)))
+            symbolsPath.append(pathForSymbol(in: boundsForSymbol(at: index)))
         }
         switch shading {
             case .solid:
@@ -76,11 +108,11 @@ class SetCardView: UIView {
         
         // card state
         layer.cornerRadius = cornerRadius
-        layer.borderWidth = symbolLineWidth * 5.0
+        layer.borderWidth = borderWidth
         layer.borderColor = state.color
     }
     
-    private func boundsForSymbolInPosition(_ position: Int) -> CGRect {
+    private func boundsForSymbol(at position: Int) -> CGRect {
         var yPositionMultiplier: CGFloat = 0.0
         switch number {
             case 1: yPositionMultiplier = 1.0
@@ -90,15 +122,13 @@ class SetCardView: UIView {
         }
         yPositionMultiplier += CGFloat(position)
         
-        let marginX = bounds.width * 0.08
-        let marginY = bounds.height * 0.08
-        let boundsWithMargin = self.bounds.insetBy(dx: marginX, dy: marginY)
+        let boundsWithMargin = bounds.insetBy(dx: marginWidth, dy: marginHeight)
         let symbolHeight = boundsWithMargin.height / 3.0
         return CGRect(x: boundsWithMargin.origin.x, y: boundsWithMargin.origin.y + symbolHeight * yPositionMultiplier,
-                      width: boundsWithMargin.width, height: symbolHeight).insetBy(dx: marginX * 0.5, dy: marginY * 0.4)
+                      width: boundsWithMargin.width, height: symbolHeight).insetBy(dx: symbolMarginWidth, dy: symbolMarginHeight)
     }
     
-    private func pathForSymbolInBounds(_ bounds: CGRect) -> UIBezierPath {
+    private func pathForSymbol(in bounds: CGRect) -> UIBezierPath {
         switch symbol {
             case .diamond:
                 let path = UIBezierPath()
@@ -108,44 +138,30 @@ class SetCardView: UIView {
                 path.addLine(to: CGPoint(x: bounds.midX, y: bounds.maxY))
                 path.close()
                 return path
-            case .squiggle: return pathForSquiggleInBounds(bounds)
+            case .squiggle: return pathForSquiggle(in: bounds)
             case .oval: return UIBezierPath(ovalIn: bounds)
         }
     }
     
-    private func pathForSquiggleInBounds(_ bounds: CGRect) -> UIBezierPath {
+    private func pathForSquiggle(in bounds: CGRect) -> UIBezierPath {
         let path = UIBezierPath()
-        let origin = bounds.topLeft.offsetBy(dx: bounds.width * 0.065, dy: bounds.height * 0.25)
-        path.move(to: origin)
-        
-        path.addCurve(to: bounds.topRight.offsetBy(dx: -bounds.width * 0.15, dy: bounds.height * 0.06),
-                      controlPoint1: bounds.topLeft.offsetBy(dx: bounds.width * 0.25, dy: -bounds.height * 0.275),
-                      controlPoint2: bounds.center)
-        
-        path.addQuadCurve(to: bounds.topRight.offsetBy(dx: -bounds.width * 0.047, dy: bounds.height * 0.094),
-                          controlPoint: bounds.topRight.offsetBy(dx: -bounds.width * 0.083, dy: 0.0))
-        
-        path.addQuadCurve(to: bounds.bottomRight.offsetBy(dx: -bounds.width * 0.065, dy: -bounds.size.height * 0.375),
-                          controlPoint: bounds.topRight.offsetBy(dx: bounds.width * 0.03, dy: bounds.height * 0.3))
-        
-        path.addCurve(to: bounds.bottomLeft.offsetBy(dx: bounds.width * 0.167, dy: -bounds.height * 0.06),
-                      controlPoint1: bounds.bottomRight.offsetBy(dx: -bounds.width * 0.3, dy: bounds.height * 0.275),
-                      controlPoint2: bounds.center.offsetBy(dx: 0.0, dy: bounds.height * 0.05))
-        
-        path.addQuadCurve(to: bounds.bottomLeft.offsetBy(dx: bounds.width * 0.06, dy: -bounds.height * 0.094),
-                          controlPoint: bounds.bottomLeft.offsetBy(dx: bounds.width * 0.1, dy: 0.0))
-        
-        path.addQuadCurve(to: origin, controlPoint: bounds.bottomLeft.offsetBy(dx: -bounds.width * 0.05, dy: -bounds.height * 0.375))
+        path.move(to: squiggleOrigin(in: bounds))
+        path.addCurve(to: squiggleFirstCurveEndPoint(in: bounds), controlPoint1: squiggleFirstCurveControlPoint1(in: bounds), controlPoint2: squiggleFirstCurveControlPoint2(in: bounds))
+        path.addQuadCurve(to: squiggleSecondCurveEndPoint(in: bounds), controlPoint: squiggleSecondCurveControlPoint(in: bounds))
+        path.addQuadCurve(to: squiggleThirdCurveEndPoint(in: bounds), controlPoint: squiggleThirdCurveControlPoint(in: bounds))
+        path.addCurve(to: squiggleFourthCurveEndPoint(in: bounds), controlPoint1: squiggleFourthCurveControlPoint1(in: bounds), controlPoint2: squiggleFourthCurveControlPoint2(in: bounds))
+        path.addQuadCurve(to: squiggleFifthCurveEndPoint(in: bounds), controlPoint: squiggleFifthCurveControlPoint(in: bounds))
+        path.addQuadCurve(to: squiggleOrigin(in: bounds), controlPoint: squiggleSixthCurveControlPoint(in: bounds))
         return path
     }
     
     private func stripCard() {
-        for positionX in stride(from: bounds.minX, to: bounds.maxX, by: bounds.width / 50.0) {
+        for positionX in stride(from: bounds.minX, to: bounds.maxX, by: stripDistance) {
             let path = UIBezierPath()
             path.move(to: CGPoint(x: positionX, y: bounds.minY))
             path.addLine(to: CGPoint(x: positionX, y: bounds.maxY))
             color.setStroke()
-            path.lineWidth = symbolLineWidth * 0.25
+            path.lineWidth = stripLineWidth
             path.stroke()
         }
     }
